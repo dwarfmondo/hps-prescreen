@@ -30,10 +30,11 @@ module HPS
       if response.kind_of?(Net::HTTPRedirection)
         handle_redirect(response['location'])
       else
-        puts "STATUS: #{response.code}"
-        puts JSON.pretty_generate(JSON.parse(response.body))
+        print(response)
       end
     end
+
+    private
 
     def handle_redirect(loc)
       puts "Getting applicant info..."
@@ -44,8 +45,12 @@ module HPS
       red_request = Net::HTTP::Get.new(red_uri.request_uri, headers)
       red_response = red_http.request(red_request)
 
-      puts "STATUS: #{red_response.code}"
-      puts JSON.pretty_generate(JSON.parse(red_response.body))
+      print(red_response)
+    end
+
+    def print(resp)
+      puts "STATUS: #{resp.code}"
+      puts JSON.pretty_generate(JSON.parse(resp.body))
     end
   end
 end
